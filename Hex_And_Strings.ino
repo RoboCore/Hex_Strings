@@ -1,27 +1,18 @@
 
 #include "String_Functions.h"
 #include "Hex_Strings.h"
+#include <Memory.h>
 
 //-------------------------------------------------------------------------------------------------
 
 
-extern int __heap_start;
-extern int* __brkval;
-
-
 void setup(){
   Serial.begin(9600);
-//  pinMode(13, OUTPUT);
-//  digitalWrite(13, LOW);
 }
 
 
 
 void loop(){
-  void* ptr = malloc(1);
-  free(ptr);
-  
-  
   AvailableMemory(&Serial);
   AvailableMemory(&Serial, true);
   

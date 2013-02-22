@@ -3,14 +3,12 @@ NULL	LITERAL1
 ByteArray	KEYWORD1
 
 ASCIIByteToHexByte	KEYWORD2
-AvailableMemory	KEYWORD2
 ByteArrayToString	KEYWORD2
 ByteArrayToHexString	KEYWORD2
 ByteToASCIIChar	KEYWORD2
 ByteToHexChar	KEYWORD2
 DisplayByteArray	KEYWORD2
 FreeByteArray	KEYWORD2
-freeRAM	KEYWORD2
 HexCharToASCIIChar	KEYWORD2
 HexCharToByte	KEYWORD2
 HexStringToByteArray	KEYWORD2

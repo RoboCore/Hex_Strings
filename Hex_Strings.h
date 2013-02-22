@@ -3,7 +3,7 @@
 
 /*
 	RoboCore Hex_Strings Library
-		(v1.0 - 18/02/2013)
+		(v1.1 - 22/02/2013)
 
   Library to manipulate Hex values with strings (for Arduino 1.0 or later)
 
@@ -36,12 +36,6 @@ typedef struct {
 //    ex: byte=3 >> 0x30 = '3'
 //    Note: if char='3' -> use (byte)'3' to obtain 0x30
 byte ASCIIByteToHexByte(byte c);
-
-//-------------------------------------------------------------------------------------------------
-
-// Display the available memory
-void AvailableMemory(HardwareSerial* serial);
-void AvailableMemory(HardwareSerial* serial, boolean total);
 
 //-------------------------------------------------------------------------------------------------
 
@@ -79,19 +73,6 @@ void DisplayByteArray(HardwareSerial* serial, ByteArray* barray_ptr, boolean dis
 
 // Free the memory used by ByteArray
 void FreeByteArray(ByteArray* barray_ptr);
-
-//-------------------------------------------------------------------------------------------------
-
-// Return the free space in RAM (in bytes)
-//    NOTE: even after calling 'free()' __brkval might not decrease.
-//            The memory block will nevertheless be marked as free.
-int freeRAM();
-int freeRAM(boolean total);
-
-//-------------------------------------------------------------------------------------------------
-
-// Calculates the size of the free list (thanks to Matthew Murdoch)
-int freeListSize();
 
 //-------------------------------------------------------------------------------------------------
 
