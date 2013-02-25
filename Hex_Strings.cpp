@@ -2,17 +2,24 @@
 
 /*
 	RoboCore Hex_Strings Library
-		(v1.1 - 22/02/2013)
+		(v1.2 - 25/02/2013)
 
   Library to manipulate Hex values with strings (for Arduino 1.0 or later)
 
   Released under the Beerware licence
+
+
+  IMPORTANT: ALWAYS initialize the Byte Array BEFORE using it
+
+  NOTE: the library uses malloc() to create Byte Arrays
+        # can use <Memory.h> to use the PointerList (just
+            include it in the main sketch)
+		>> see UsingMemory() of <String_Functions.h>
+  
 */
 
-//IMPORTANT: ALWAYS initialize the Byte Array BEFORE using it
-
 //NOTE: good results weren't obtained using 'realloc', so the code
-          //is written using 'malloc'.
+//        is written using 'malloc'.
 
 
 #include "Hex_Strings.h"
@@ -55,13 +62,19 @@ byte ASCIIByteToHexByte(byte c){
 // Convert a ByteArray into a string
 //    ex: {65, 65} >> "AA"
 char* ByteArrayToString(ByteArray* barray_ptr){
+  //allocate
+#ifdef RC_MEMORY
+  PointerList::Initialize();
+  char* string = (char*)Mmalloc((barray_ptr->length + 1) * sizeof(char));
+#else
   char* string = (char*)malloc((barray_ptr->length + 1) * sizeof(char));
-  
+#endif
+
   if(string == NULL){
 #ifdef RC_HEX_DEBUG
     Serial.println("ERROR in ByteArrayToString: cannot allocate memory!");
 #endif
-    return "";
+    return NULL;
   }
   
   string[barray_ptr->length] = '\0'; //insert End Of String
@@ -76,13 +89,19 @@ char* ByteArrayToString(ByteArray* barray_ptr){
 // Convert a ByteArray into a Hex string
 //    ex: {65, 65} >> "4141"
 char* ByteArrayToHexString(ByteArray* barray_ptr){
+  //allocate
+#ifdef RC_MEMORY
+  PointerList::Initialize();
+  char* string = (char*)Mmalloc((barray_ptr->length * 2 + 1) * sizeof(char));
+#else
   char* string = (char*)malloc((barray_ptr->length * 2 + 1) * sizeof(char));
-  
+#endif
+
   if(string == NULL){
 #ifdef RC_HEX_DEBUG
     Serial.println("ERROR in ByteArrayToHexString: cannot allocate memory!");
 #endif
-    return "";
+    return NULL;
   }
   
   byte msb, lsb;
@@ -128,9 +147,23 @@ char ByteToASCIIChar(byte b){
 char* ByteToHexChar(byte b){
   byte msb = (b >> 4);
   byte lsb = (b & 0x0F);
+
+  //allocate
+#ifdef RC_MEMORY
+  PointerList::Initialize();
+  char* res = (char*)Mmalloc(3 * sizeof(char));
+#else
+  char* res = (char*)malloc(3 * sizeof(char));
+#endif
+
+  if(res == NULL){
+#ifdef RC_HEX_DEBUG
+    Serial.println("ERROR in ByteToHexChar: cannot allocate memory!");
+#endif
+    return NULL;
+  }
   
-  char* res = "--";
-  
+  res[2] = '\0'; //null termination of strings
   if(msb <= 9)
     res[0] = msb + 48;
   else
@@ -175,7 +208,12 @@ void DisplayByteArray(HardwareSerial* serial, ByteArray* barray_ptr, boolean dis
 
 // Free the memory used by ByteArray
 void FreeByteArray(ByteArray* barray_ptr){
+#ifdef RC_MEMORY
+  Mfree(barray_ptr->ptr); //free memory
+#else
   free(barray_ptr->ptr); //free memory
+#endif
+
   barray_ptr->ptr = NULL; //point to null
   barray_ptr->length = 0; //reset length
 }
@@ -290,11 +328,11 @@ void HexStringToByteArray(char* HexString, ByteArray* barray_ptr){
   }
   
   int index = 0;
-//  char* str = "--"; //ser Note below
+//  char* str = "--"; //see Note below
   for(int i=0 ; i < length - 1 ; i=i+2){
-//    str[0] = HexString[i]; //ser Note below
-//    str[1] = HexString[i+1]; //ser Note below
-//    barray_ptr->ptr[index] = HexCharToByte(str); //ser Note below
+//    str[0] = HexString[i]; //see Note below
+//    str[1] = HexString[i+1]; //see Note below
+//    barray_ptr->ptr[index] = HexCharToByte(str); //see Note below
 
   //NOTE: use code below (extracted from HexCharToByte() because it is
               //stabler than calling HexCharToByte() each time
@@ -344,12 +382,17 @@ boolean JoinByteArray(ByteArray* ba1_ptr, ByteArray* ba2_ptr){
   if(ba2_ptr->length <= 0)
     return true;
   
-  
-  //reallocate memory
+  //allocate memory
   byte *ptr;
   int new_length = ba1_ptr->length + ba2_ptr->length;
 //  ptr = (byte*)realloc(ba1_ptr->ptr, new_length * sizeof(byte));
+#ifdef RC_MEMORY
+  PointerList::Initialize();
+  ptr = (byte*)Mmalloc(new_length * sizeof(byte));
+#else
   ptr = (byte*)malloc(new_length * sizeof(byte));
+#endif
+
   if(ptr == NULL){
 #ifdef RC_HEX_DEBUG
     Serial.println("ERROR in JoinByteArray: cannot allocate memory!");
@@ -376,9 +419,15 @@ boolean JoinByteArray(ByteArray* ba1_ptr, ByteArray* ba2_ptr){
 
 // Resize ByteArray
 boolean ResizeByteArray(ByteArray* barray_ptr, int new_length){
-  //reallocate memory
+  //allocate memory
   byte *ptr;
+#ifdef RC_MEMORY
+  PointerList::Initialize();
+  ptr = (byte*)Mmalloc(new_length * sizeof(byte));
+#else
   ptr = (byte*)malloc(new_length * sizeof(byte));
+#endif
+
   if(ptr == NULL){
 #ifdef RC_HEX_DEBUG
     Serial.println("ERROR in ResizeByteArray: cannot allocate memory!");
@@ -403,40 +452,6 @@ boolean ResizeByteArray(ByteArray* barray_ptr, int new_length){
 
   return true;
 }
-
-
-//boolean ResizeByteArray(ByteArray* barray_ptr, int new_length){
-//  //reallocate memory
-//  byte *ptr;
-//  ptr = (byte*)realloc((void*)barray_ptr, new_length * sizeof(byte));
-//  if(ptr == NULL){
-//#ifdef RC_HEX_DEBUG
-//    Serial.println("ERROR in ResizeByteArray: cannot allocate memory!");
-//#endif
-//    return false;
-//  }
-//  
-//  //copy the values
-//  if(ptr != barray_ptr->ptr){
-//    for(int i=0 ; i < barray_ptr->length ; i++){
-//      ptr[i] = barray_ptr->ptr[i];
-//    }
-//  }
-//  //fill with '0'
-//  for(int i=barray_ptr->length ; i < new_length ; i++){
-//    ptr[i] = 0;
-//  }
-//  
-//  //update values
-//  if(ptr != barray_ptr->ptr){
-//    FreeByteArray(barray_ptr);
-//    barray_ptr->ptr = ptr;
-//  }
-//  barray_ptr->length = new_length;
-//  ptr = NULL;
-//
-//  return true;
-//}
 
 
 //previous version of the function, using 'realloc'
@@ -495,6 +510,8 @@ void StringToByteArray(char* string, ByteArray *barray_ptr){
 }
 
 //-------------------------------------------------------------------------------------------------
+
+
 
 
 

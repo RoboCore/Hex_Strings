@@ -5,6 +5,8 @@
 
 //-------------------------------------------------------------------------------------------------
 
+//extern int __heap_start;
+
 
 void setup(){
   Serial.begin(9600);
@@ -13,6 +15,17 @@ void setup(){
 
 
 void loop(){
+//  Serial.println((int)&__heap_start, HEX);
+  Serial.print("<Memory> ");
+  if(UsingMemory())
+    Serial.println("OK");
+  else
+    Serial.println("no");
+  AvailableMemory(&Serial, true);
+  Serial.println();
+  
+  
+  
   AvailableMemory(&Serial);
   AvailableMemory(&Serial, true);
   
@@ -36,6 +49,7 @@ void loop(){
   DisplayByteArray(&Serial, &ba1, true);
 
   Serial.println("\n1***"); //*************************************
+  AvailableMemory(&Serial, true);
   Serial.println("freeing");
   FreeByteArray(&ba1);
   ResizeByteArray(&ba1, 2);
@@ -50,6 +64,7 @@ void loop(){
   DisplayByteArray(&Serial, &ba1, true);
 
   Serial.println("\n1.5***"); //*************************************
+  AvailableMemory(&Serial, true);
   Serial.println("joining");
   ResizeByteArray(&ba1, 2);
     ba1.ptr[0] = 13;
@@ -74,7 +89,6 @@ void loop(){
   DisplayByteArray(&Serial, &ba1, true);
 
   Serial.println("\n2***"); //*************************************
-  Serial.println(freeListSize());
   AvailableMemory(&Serial);
   AvailableMemory(&Serial, true);
   
@@ -83,7 +97,6 @@ void loop(){
   Serial.println((char)0x41);
   
   Serial.println("\n3***"); //*************************************
-  Serial.println(freeListSize());
   AvailableMemory(&Serial);
   AvailableMemory(&Serial, true);
 
@@ -102,7 +115,7 @@ void loop(){
   
   ByteArray barray;
   InitializeByteArray(&barray);
-  HexStringToByteArray("4141FF", &barray); //-------------------------------------------------
+  HexStringToByteArray("4141FF", &barray);
   DisplayByteArray(&Serial, &barray, true);
 
   Serial.println("\n5***"); //*************************************
@@ -190,6 +203,14 @@ void loop(){
   Serial.println("--- FIM ---");
   FreeByteArray(&barray);
   FreeByteArray(&ba2);
+  
+  Serial.print("count: "); Serial.println(PointerList::ListCount());
+  PointerList::DisplayList(&Serial);
+  Serial.println("boom");
+  MReset();
+  PointerList::DisplayList(&Serial);
+  AvailableMemory(&Serial);
+  AvailableMemory(&Serial, true);
   
   while(1){
     delay(100);
