@@ -1,20 +1,20 @@
 
-
 /*
 	RoboCore Hex_Strings Library
-		(v1.2 - 25/02/2013)
+		(v1.2 - 26/02/2013)
 
-  Library to manipulate Hex values with strings (for Arduino 1.0 or later)
+  Library to manipulate Hex values with strings
+    (tested only in Arduino 1.0.1)
 
   Released under the Beerware licence
 
 
   IMPORTANT: ALWAYS initialize the Byte Array BEFORE using it
 
-  NOTE: the library uses malloc() to create Byte Arrays
-        # can use <Memory.h> to use the PointerList (just
-            include it in the main sketch)
-		>> see UsingMemory() of <String_Functions.h>
+  NOTE: the library uses malloc() to create Byte Arrays and
+        the Pointer List in <Memory.h> is usedby default .
+        To use regular malloc(), undefine USE_POINTER_LIST
+        in <Memory.h>
   
 */
 
@@ -63,7 +63,7 @@ byte ASCIIByteToHexByte(byte c){
 //    ex: {65, 65} >> "AA"
 char* ByteArrayToString(ByteArray* barray_ptr){
   //allocate
-#ifdef RC_MEMORY
+#ifdef USE_POINTER_LIST
   PointerList::Initialize();
   char* string = (char*)Mmalloc((barray_ptr->length + 1) * sizeof(char));
 #else
@@ -90,7 +90,7 @@ char* ByteArrayToString(ByteArray* barray_ptr){
 //    ex: {65, 65} >> "4141"
 char* ByteArrayToHexString(ByteArray* barray_ptr){
   //allocate
-#ifdef RC_MEMORY
+#ifdef USE_POINTER_LIST
   PointerList::Initialize();
   char* string = (char*)Mmalloc((barray_ptr->length * 2 + 1) * sizeof(char));
 #else
@@ -149,7 +149,7 @@ char* ByteToHexChar(byte b){
   byte lsb = (b & 0x0F);
 
   //allocate
-#ifdef RC_MEMORY
+#ifdef USE_POINTER_LIST
   PointerList::Initialize();
   char* res = (char*)Mmalloc(3 * sizeof(char));
 #else
@@ -208,7 +208,7 @@ void DisplayByteArray(HardwareSerial* serial, ByteArray* barray_ptr, boolean dis
 
 // Free the memory used by ByteArray
 void FreeByteArray(ByteArray* barray_ptr){
-#ifdef RC_MEMORY
+#ifdef USE_POINTER_LIST
   Mfree(barray_ptr->ptr); //free memory
 #else
   free(barray_ptr->ptr); //free memory
@@ -386,7 +386,7 @@ boolean JoinByteArray(ByteArray* ba1_ptr, ByteArray* ba2_ptr){
   byte *ptr;
   int new_length = ba1_ptr->length + ba2_ptr->length;
 //  ptr = (byte*)realloc(ba1_ptr->ptr, new_length * sizeof(byte));
-#ifdef RC_MEMORY
+#ifdef USE_POINTER_LIST
   PointerList::Initialize();
   ptr = (byte*)Mmalloc(new_length * sizeof(byte));
 #else
@@ -421,7 +421,7 @@ boolean JoinByteArray(ByteArray* ba1_ptr, ByteArray* ba2_ptr){
 boolean ResizeByteArray(ByteArray* barray_ptr, int new_length){
   //allocate memory
   byte *ptr;
-#ifdef RC_MEMORY
+#ifdef USE_POINTER_LIST
   PointerList::Initialize();
   ptr = (byte*)Mmalloc(new_length * sizeof(byte));
 #else
@@ -445,7 +445,7 @@ boolean ResizeByteArray(ByteArray* barray_ptr, int new_length){
   }
   
   //update values
-  FreeByteArray(barray_ptr);
+  FreeByteArray(barray_ptr); //free the previous memory block
   barray_ptr->ptr = ptr;
   barray_ptr->length = new_length;
   ptr = NULL;

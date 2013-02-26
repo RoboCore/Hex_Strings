@@ -1,0 +1,27 @@
+**********************
+  Hex_String Library
+**********************
+
+Note to self - 1:						(26/02/13)
+	when using USE_POINTER_LIST, the address of __heap_start
+	is added to __freelist, showing then more memory than
+	there is
+	# by commenting the call to FreeByteArray() in ResizeByteArray()
+		this issue doesn't happen anymore; however more
+		memory is allocated during program execution. This
+		issue still occurs when the lines of code of
+		FreeByteArray() are copied to replace its call;
+	# when using debug to check which addresses were freed
+		in FreeByteArray(), the address of __heap_start
+		was NEVER displayed;
+	# to see where it first occurs, uncomment the lines where
+		(### note to self - 1 ###) are foun in the sketch
+		example, and add the following lines to
+		<Memory.h>::freeListSize()
+			Serial.print("+++++ ");
+			Serial.print((int)current, HEX);
+			Serial.print(" .. ");
+			Serial.println((int)current->sz);
+
+
+

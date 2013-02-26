@@ -1,11 +1,11 @@
 
-#include "String_Functions.h"
-#include "Hex_Strings.h"
 #include <Memory.h>
+#include <String_Functions.h>
+#include "Hex_Strings.h"
 
 //-------------------------------------------------------------------------------------------------
 
-//extern int __heap_start;
+//extern int __heap_start; //### note to self - 1 ###
 
 
 void setup(){
@@ -15,9 +15,9 @@ void setup(){
 
 
 void loop(){
-//  Serial.println((int)&__heap_start, HEX);
+//  Serial.println((int)&__heap_start, HEX); //### note to self - 1 ###
   Serial.print("<Memory> ");
-  if(UsingMemory())
+  if(UsingPointerList())
     Serial.println("OK");
   else
     Serial.println("no");
@@ -37,7 +37,9 @@ void loop(){
   ResizeByteArray(&ba1, 2);
   DisplayByteArray(&Serial, &ba1, true);
 
+//  AvailableMemory(&Serial, true); //### note to self - 1 ###
   ResizeByteArray(&ba1, 2);
+//  AvailableMemory(&Serial, true); //### note to self - 1 ###
     ba1.ptr[0] = 13;
     ba1.ptr[1] = 89;
   DisplayByteArray(&Serial, &ba1, true);
