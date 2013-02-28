@@ -4,7 +4,7 @@
 		(v1.2 - 26/02/2013)
 
   Library to manipulate Hex values with strings
-    (tested only in Arduino 1.0.1)
+    (tested with Arduino 0022 and 1.0.1)
 
   Released under the Beerware licence
 
@@ -198,7 +198,7 @@ void DisplayByteArray(HardwareSerial* serial, ByteArray* barray_ptr, boolean dis
   if(display_values && (barray_ptr->length > 0)){
     for(int i=0 ; i < barray_ptr->length ; i++){
       serial->print("\t.");
-      serial->println(barray_ptr->ptr[i]);
+      serial->println((int)barray_ptr->ptr[i]);
     }
   }
   serial->println();
