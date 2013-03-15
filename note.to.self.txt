@@ -2,7 +2,7 @@
   Hex_String Library
 **********************
 
-Note to self - 1:						(26/02/13)
+Note to self # 1:						(26/02/13)
 	when using USE_POINTER_LIST, the address of __heap_start
 	is added to __freelist, showing then more memory than
 	there is
@@ -22,6 +22,12 @@ Note to self - 1:						(26/02/13)
 			Serial.print((int)current, HEX);
 			Serial.print(" .. ");
 			Serial.println((int)current->sz);
+
+	SOLVED - 04/03/13
+		apparently memory is first allocated in the heap start,
+		so __heap_start should appear in the __freelist after
+		freeing the respective allocated memory.
+
 
 
 
