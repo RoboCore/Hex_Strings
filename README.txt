@@ -5,7 +5,8 @@
   Library to manipulate Hex values with strings
     (tested with Arduino 0022 and 1.0.1)
 
-  Released under the Beerware licence
+  Released under the Beerware license
+  Written by François
 
 
   IMPORTANT: ALWAYS initialize the Byte Array BEFORE using it
