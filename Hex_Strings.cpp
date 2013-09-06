@@ -1,7 +1,7 @@
 
 /*
 	RoboCore Hex_Strings Library
-		(v1.2 - 26/02/2013)
+		(v1.2 - 06/09/2013)
 
   Library to manipulate Hex values with strings
     (tested with Arduino 0022 and 1.0.1)
@@ -254,7 +254,7 @@ char HexCharToASCIIChar(char* HexChar){
   else if(((byte)HexChar[0] >= 65) && ((byte)HexChar[0] <= 70)) //A-F
     res = (((byte)HexChar[0] - 65 + 10) << 4);
   else if(((byte)HexChar[0] >= 97) && ((byte)HexChar[0] <= 102)) //a-f
-    res = (((byte)HexChar[0] - 102 + 10) << 4);
+    res = (((byte)HexChar[0] - 97 + 10) << 4);
   else
     return 0;
 
@@ -264,7 +264,7 @@ char HexCharToASCIIChar(char* HexChar){
   else if(((byte)HexChar[1] >= 65) && ((byte)HexChar[1] <= 70)) //A-F
     res |= ((byte)HexChar[1] - 65 + 10);
   else if(((byte)HexChar[1] >= 97) && ((byte)HexChar[1] <= 102)) //a-f
-    res |= ((byte)HexChar[1] - 102 + 10);
+    res |= ((byte)HexChar[1] - 97 + 10);
   else
     return 0;
 
@@ -294,7 +294,7 @@ byte HexCharToByte(char* HexChar){
   else if(((byte)HexChar[0] >= 65) && ((byte)HexChar[0] <= 70)) //A-F
     res = (((byte)HexChar[0] - 65 + 10) << 4);
   else if(((byte)HexChar[0] >= 97) && ((byte)HexChar[0] <= 102)) //a-f
-    res = (((byte)HexChar[0] - 102 + 10) << 4);
+    res = (((byte)HexChar[0] - 97 + 10) << 4);
   else
     return 0;
 
@@ -304,7 +304,7 @@ byte HexCharToByte(char* HexChar){
   else if(((byte)HexChar[1] >= 65) && ((byte)HexChar[1] <= 70)) //A-F
     res |= ((byte)HexChar[1] - 65 + 10);
   else if(((byte)HexChar[1] >= 97) && ((byte)HexChar[1] <= 102)) //a-f
-    res |= ((byte)HexChar[1] - 102 + 10);
+    res |= ((byte)HexChar[1] - 97 + 10);
   else
     return 0;
 
@@ -359,7 +359,7 @@ void HexStringToByteArray(char* HexString, ByteArray* barray_ptr){
     else if(((byte)HexString[i] >= 65) && ((byte)HexString[i] <= 70)) //A-F
       barray_ptr->ptr[index] = (((byte)HexString[i] - 65 + 10) << 4);
     else if(((byte)HexString[i] >= 97) && ((byte)HexString[i] <= 102)) //a-f
-      barray_ptr->ptr[index] = (((byte)HexString[i] - 102 + 10) << 4);
+      barray_ptr->ptr[index] = (((byte)HexString[i] - 97 + 10) << 4);
     else
       barray_ptr->ptr[index] = 0;
   
@@ -369,7 +369,7 @@ void HexStringToByteArray(char* HexString, ByteArray* barray_ptr){
     else if(((byte)HexString[i+1] >= 65) && ((byte)HexString[i+1] <= 70)) //A-F
       barray_ptr->ptr[index] |= ((byte)HexString[i+1] - 65 + 10);
     else if(((byte)HexString[i+1] >= 97) && ((byte)HexString[i+1] <= 102)) //a-f
-      barray_ptr->ptr[index] |= ((byte)HexString[i+1] - 102 + 10);
+      barray_ptr->ptr[index] |= ((byte)HexString[i+1] - 97 + 10);
     else
       barray_ptr->ptr[index] = 0;
     

@@ -106,8 +106,12 @@ void loop(){
   Serial.println(ByteToHexChar(0xFF));
   Serial.println(ByteToASCIIChar(0x41));
   Serial.println(ByteToASCIIChar(65));
-  Serial.println(HexCharToASCIIChar("41"));
+  Serial.println(HexCharToASCIIChar("41")); // 'A'
+  Serial.println(HexCharToASCIIChar("4A")); // 'J'
+  Serial.println(HexCharToASCIIChar("4a")); // 'J'
   Serial.println(HexCharToByte("41"));
+  Serial.println(HexCharToByte("AA"));
+  Serial.println(HexCharToByte("aa"));
   Serial.println(StrLength(ByteToHexChar(0xFF))); //ok
 
   
@@ -117,7 +121,7 @@ void loop(){
   
   ByteArray barray;
   InitializeByteArray(&barray);
-  HexStringToByteArray("4141FF", &barray);
+  HexStringToByteArray("4141FFAAaa", &barray);
   DisplayByteArray(&Serial, &barray, true);
 
   Serial.println("\n5***"); //*************************************
